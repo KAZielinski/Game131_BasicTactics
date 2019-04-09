@@ -10,10 +10,12 @@ public class ActorEditor : Editor
     bool isBoardShowing = false;
     bool isActionEffectShowing = false;
     bool isImmunitiesShowing = false;
+    
 
     public override void OnInspectorGUI()
     {
         Actor myActor = target as Actor;
+
 
         myActor.actorName = EditorGUILayout.TextField("Actor name", myActor.actorName);
 
@@ -34,35 +36,25 @@ public class ActorEditor : Editor
         // Damage
         myActor.damage = EditorGUILayout.IntSlider("Damage", myActor.damage, 0, 180);
 
-
-        Actor.ActionSource[] sourceValues = Enum.GetValues(typeof(Actor.ActionSource)) as Actor.ActionSource[];
-        string[] sourceNames = Enum.GetNames(typeof(Actor.ActionSource));
-
-        //
+        // Action target
         Actor.ActionTarget[] targetValue = Enum.GetValues(typeof(Actor.ActionTarget)) as Actor.ActionTarget[];
         string[] targetName = Enum.GetNames(typeof(Actor.ActionTarget));
         SelectionList<Actor.ActionTarget> targetSource = new SelectionList<Actor.ActionTarget>(targetValue, targetName);
-
+        myActor.actionTarget = targetSource.RadioList("Action Target", myActor.actionTarget, 3);
+        
+        
+        // Action Effect
         Actor.ActionEffect[] effectValue = Enum.GetValues(typeof(Actor.ActionEffect)) as Actor.ActionEffect[];
         string[] effectName = Enum.GetNames(typeof(Actor.ActionTarget));
         SelectionList<Actor.ActionEffect> actionEffect = new SelectionList<Actor.ActionEffect>(effectValue, effectName);
-
-        Actor.Position[] positionValue = Enum.GetValues(typeof(Actor.Position)) as Actor.Position[];
-        string[] positionName = Enum.GetNames(typeof(Actor.Position));
-        SelectionList<Actor.Position> position = new SelectionList<Actor.Position>(positionValue, positionName);
-        //
-
-
-
-        SelectionList<Actor.ActionSource> sources = new SelectionList<Actor.ActionSource>(sourceValues, sourceNames);
-        SelectionList<Actor.ActionSource> immune = new SelectionList<Actor.ActionSource>(sourceValues, sourceNames);
-
-        // Action target
-        myActor.actionTarget = targetSource.RadioList("Action Target", myActor.actionTarget, 3);
-        // Action Effect
         myActor.actionEffect = actionEffect.RadioList("Action Effect", myActor.actionEffect, 3);
 
         // for action effect source
+        Actor.ActionSource[] sourceValues = Enum.GetValues(typeof(Actor.ActionSource)) as Actor.ActionSource[];
+
+        string[] sourceNames = Enum.GetNames(typeof(Actor.ActionSource));
+        SelectionList<Actor.ActionSource> sources = new SelectionList<Actor.ActionSource>(sourceValues, sourceNames);
+
         isActionEffectShowing = EditorGUILayout.Foldout(isActionEffectShowing, "Action Effect Source");
         if (isActionEffectShowing)
         {
@@ -70,11 +62,20 @@ public class ActorEditor : Editor
         }
         // myActor.immunities = immune.SelectionList(myActor.source);
 
-        //myActor.immunities = (Actor.ActionSource[])EditorGUILayout.EnumPopup("Immunities", myActor.immunities);
+        // Immunities
+        isImmunitiesShowing = EditorGUILayout.Foldout(isImmunitiesShowing, "Immunities");
+        if (isImmunitiesShowing)
+        {
+            myActor.actionEffectSource = (Actor.ActionSource)EditorGUILayout.EnumPopup("Immunities", myActor.actionEffectSource);
+        }
 
-
+        // Percent Chance to hit
         myActor.percentChanceToHit = EditorGUILayout.Slider("Percent Chance", myActor.percentChanceToHit, 0.0f, 100.0f);
 
+        // Board Position
+        Actor.Position[] positionValue = Enum.GetValues(typeof(Actor.Position)) as Actor.Position[];
+        string[] positionName = Enum.GetNames(typeof(Actor.Position));
+        SelectionList<Actor.Position> position = new SelectionList<Actor.Position>(positionValue, positionName);
         
         isBoardShowing = EditorGUILayout.Foldout(isBoardShowing, "Board Position");
         if (isBoardShowing)
