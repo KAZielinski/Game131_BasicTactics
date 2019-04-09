@@ -67,13 +67,18 @@ public class Actor : MonoBehaviour {
 
     public string actorName;
 
+    // edited
+    [Range(0, 1000)]
     public int maxHitPoints = 100;
+
+    [Range(0, 1000)]
     public int hitPoints = 100;
 
     public int initiative = 50;
 
     public ActionTarget actionTarget;
 
+    [Range(0, 180)]
     public int damage = 25;
 
     public ActionEffect actionEffect;
@@ -82,7 +87,9 @@ public class Actor : MonoBehaviour {
 
     public ActionSource[] immunities;
 
-    public int percentChanceToHit = 75;
+    // Changed to float
+    [Range(0.0f, 100.0f)]
+    public float percentChanceToHit = 75;
 
     public Position boardPosition;
 
